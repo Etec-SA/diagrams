@@ -87,6 +87,29 @@ frege.reduce('P <-> ( Q -> P )'); // {2}
 ((¬(P) ∨ (¬(Q) ∨ P)) ∧ (¬((¬(Q) ∨ P)) ∨ P)) // {2}
 ```
 
+Generate Truth Table:
+```typescript
+import  frege  from  "src";
+
+frege.generateTruthTable('P->(Q->P)'); // {1}
+frege.generateTruthTable({operation:  'Conjunction', left:  'P', right:  'Q'}); // {2}
+```
+
+```typescript
+// {1}
+[
+  [ 'P', 'Q', 'P->(Q->P)' ], // headers 
+  [ [ 0, 0 ], [ 0, 1 ], [ 1, 0 ], [ 1, 1 ] ], // truth combinations
+  [ true, true, true, true ] // truth values
+]
+
+// {2}
+[
+  [ 'P', 'Q', '(P ∧ Q)' ],
+  [ [ 0, 0 ], [ 0, 1 ], [ 1, 0 ], [ 1, 1 ] ],
+  [ false, false, false, true ]
+]
+```
 
 
 
