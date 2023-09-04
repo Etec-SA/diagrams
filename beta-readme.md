@@ -111,6 +111,76 @@ frege.generateTruthTable({operation:  'Conjunction', left:  'P', right:  'Q'}); 
 ]
 ```
 
+Check Proof:
+```typescript
+import  frege  from  "src";
+import { Proof } from  "src/types/syntactic/proof";
+const { toFormulaObject } = frege.parse;
+
+const  proof: Proof = {
+	1: {
+		id:  1,
+		expression:  toFormulaObject('¬P ∧ ¬Q'),
+		type:  'Premisse'
+	},
+	2: {
+		id:  2,
+		expression:  toFormulaObject('(P ∨ Q)'),
+		type:  'Hypothesis'
+	},
+	
+	3: {
+		id:  3,
+		expression:  toFormulaObject('¬P'),
+		from: [[1], 'Conjunction Elimination'],
+		type:  'Knowledge'
+	},
+	4: {
+		id:  4,
+		expression:  toFormulaObject('¬Q'),
+		from: [[1], 'Conjunction Elimination'],
+		type:  'Knowledge'
+	},
+	5: {
+		id:  5,
+		expression:  toFormulaObject('P'),
+		from: [[2, 4], 'Disjunctive Syllogism'],
+		type:  'Knowledge'
+	},
+	6: {
+		id:  6,
+		expression:  toFormulaObject('P ∧ ¬P'),
+		type:  'End of Hypothesis',
+		hypothesisId:  2,
+		from: [[5, 3], 'Conjunction Introduction']
+	},
+	7: {
+		id:  7,
+		expression:  toFormulaObject('(P ∨ Q) -> (P ∧ ¬P)'),
+		type:  'Knowledge',
+		from: [[2,6], 'Conditional Proof']
+	},
+	8: {
+		id:  8,
+		expression:  toFormulaObject('¬(P ∨ Q)'),
+		type:  'Conclusion',
+		from: [[7], 'Reductio Ad Absurdum']
+	}
+}
+
+frege.checkProof(proof); // {1}
+```
+
+```
+ Applied Conjunction Elimination with success at line 3 ✔️
+ Applied Conjunction Elimination with success at line 4 ✔️ 
+ Applied Disjunctive Syllogism with success at line 5 ✔️   
+ Applied Conjunction Introduction with success at line 6 ✔️
+ Applied Conditional Proof with success at line 7 ✔️       
+ Applied Reductio Ad Absurdum with success at line 8 ✔️    
+ 
+ { (¬(P) ∧ ¬(Q)) } ⊢ ¬((P ∨ Q))
+```
 
 
 ## 🚀 Technologies
