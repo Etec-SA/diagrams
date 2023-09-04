@@ -31,6 +31,8 @@ Constructing formulas, simplifying them, checking semantic or syntactic validity
 
 
 Parse:
+
+Formula to Object:
 ```typescript
 import frege from 'src';
 
@@ -47,6 +49,22 @@ frege.parse.toFormulaObject('¬P'); // {5} Negation
 { operation: 'Conjunction', left: 'P', right: 'Q' }   // {3} Conjunction
 { operation: 'Disjunction', left: 'P', right: 'Q' }   // {4} Disjunction
 { operation: 'Negation', value: 'P' } // {5} Negation
+```
+
+Object to Formula:
+```typescript
+frege.parse.toFormulaString({ operation:  'Implication', left:  'P', right:  'Q' }); // {1} Implication
+frege.parse.toFormulaString({ operation:  'Biconditional', left:  'P', right:  'Q' }); // {2} Biconditional
+frege.parse.toFormulaString({ operation:  'Conjunction', left:  'P', right:  'Q' }); // {3} Conjunction
+frege.parse.toFormulaString({ operation:  'Disjunction', left:  'P', right:  'Q' }); // {4} Disjunction
+frege.parse.toFormulaString({ operation:  'Negation', value:  'P' }); // {5} Negation
+```
+```
+(P -> Q) // {1}
+(P <-> Q) // {2}
+(P ∧ Q)  // {3}
+(P ∨ Q)  // {4}
+¬(P)    // {5}
 ```
 
 Evaluate:
@@ -181,6 +199,24 @@ frege.checkProof(proof); // {1}
  
  { (¬(P) ∧ ¬(Q)) } ⊢ ¬((P ∨ Q))
 ```
+
+Semantic consequence:
+
+```typescript
+import  frege  from  "src";
+
+const  first = frege.verifyConsequence.semantic(['P->Q', 'Q'], 'P'); // {1}
+const  second = frege.verifyConsequence.semantic(['P->Q', 'P'], 'Q'); // {2}
+
+console.log('first: ', first);
+console.log('second: ', second);
+```
+
+```
+first:  false
+second:  true
+```
+
 
 
 ## 🚀 Technologies
